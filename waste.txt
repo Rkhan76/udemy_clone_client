@@ -1,0 +1,50 @@
+/src
+ ├── assets/             # Static assets like images, fonts, and icons
+ │    ├── images/
+ │    └── fonts/
+ ├── components/          # Reusable components (UI and logic)
+ │    ├── Navbar.tsx
+ │    ├── Sidebar.tsx
+ │    └── Button.tsx
+ ├── containers/          # Stateful components (complex UI + logic)
+ │    ├── HomeContainer.tsx
+ │    └── DashboardContainer.tsx
+ ├── contexts/            # React Contexts for global state
+ │    └── AuthContext.tsx
+ ├── hooks/               # Custom React hooks
+ │    └── useAuth.ts
+ │    └── useFetchCourses.ts
+ ├── layouts/             # Layout components (e.g., Dashboard layout)
+ │    └── DashboardLayout.tsx
+ ├── pages/               # Pages of the app (each route corresponds to a page)
+ │    ├── Home.tsx
+ │    ├── Login.tsx
+ │    ├── Signup.tsx
+ │    ├── Dashboard.tsx
+ │    ├── CourseDetail.tsx
+ │    └── Cart.tsx
+ ├── providers/           # Context and state providers
+ │    └── RecoilProvider.tsx
+ ├── routes/              # Route management
+ │    ├── AppRoutes.tsx
+ │    └── ProtectedRoute.tsx
+ ├── services/            # API service calls
+ │    ├── authService.ts
+ │    └── courseService.ts
+ ├── state/               # Recoil or Redux state management
+ │    ├── atoms/
+ │    │    └── cartAtom.ts
+ │    └── selectors/
+ │         └── courseSelector.ts
+ ├── styles/              # Global and Tailwind styles
+ │    └── globals.css
+ ├── types/               # TypeScript types and interfaces
+ │    └── authTypes.ts
+ │    └── courseTypes.ts
+ ├── utils/               # Utility functions and helpers
+ │    └── formatPrice.ts
+ │    └── validateEmail.ts
+ ├── App.tsx              # Root component
+ ├── index.tsx            # Entry point
+ ├── tailwind.config.js   # Tailwind CSS config
+ └── package.json         # Dependencies and scripts
