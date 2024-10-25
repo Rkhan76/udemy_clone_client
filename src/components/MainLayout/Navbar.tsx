@@ -2,9 +2,16 @@ import { NavLink, Link } from 'react-router-dom'
 import Logo from '../../assets/logo.svg'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from '../ui/button'
-
+import { useRecoilState } from 'recoil'
+import { isSignedInState } from '../../store/atoms/auth'
+import { userDetailsState } from '../../store/atoms/user'
+import { AvatarButton } from '../../components/MainLayout/AvatarButton'
 
 export const Navbar = () => {
+  const [isSignedIn] = useRecoilState(isSignedInState)
+  const [userDetails] = useRecoilState(userDetailsState)
+
+ 
   return (
     <nav className="flex items-center justify-between p-4 bg-white shadow mb-4">
       <Link to="/">
@@ -34,23 +41,28 @@ export const Navbar = () => {
         >
           <ShoppingCart className="w-6 h-6" />
         </NavLink>
-        <div className="flex items-center space-x-2 hidden lg:block">
-          <Button
-            variant={'outline'}
-            size={'custom'}
-            className="rounded-none"
-            asChild
-          >
-            <Link to="/signin">Sign In</Link>
-          </Button>
-          <Button
-            size={'custom'}
-            className="rounded-none hover:text-white"
-            asChild
-          >
-            <Link to="/signup">Sign Up</Link>
-          </Button>
-        </div>
+
+        {isSignedIn ? (
+          <AvatarButton userDetails={userDetails}/>
+        ) : (
+          <div className="flex items-center space-x-2 hidden lg:block">
+            <Button
+              variant={'outline'}
+              size={'custom'}
+              className="rounded-none"
+              asChild
+            >
+              <Link to="/signin">Sign In</Link>
+            </Button>
+            <Button
+              size={'custom'}
+              className="rounded-none hover:text-white"
+              asChild
+            >
+              <Link to="/signup">Sign Up</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </nav>
   )

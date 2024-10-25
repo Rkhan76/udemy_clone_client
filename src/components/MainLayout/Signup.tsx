@@ -2,7 +2,7 @@ import { Label } from '@radix-ui/react-label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { BackgroundImgAuth } from './BackgroundImgAuth'
-import { SignInWithGoogle } from './SiginWithGoogle'
+import GoogleAuthContainer from '../../containers/MainLayout/GoogleAuthContainer'
 
 export const Signup = ({
   onSubmit,
@@ -49,9 +49,9 @@ export const Signup = ({
             <Input
               type="email"
               id="email"
-              name="email" // Add the name attribute
-              value={formData.email} // Use the formData state
-              onChange={onInputChange} // Handle input change
+              name="email" 
+              value={formData.email} 
+              onChange={onInputChange} 
               placeholder="Email"
               className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md"
               required
@@ -65,9 +65,9 @@ export const Signup = ({
             <Input
               type="password"
               id="password"
-              name="password" // Add the name attribute
-              value={formData.password} // Use the formData state
-              onChange={onInputChange} // Handle input change
+              name="password" 
+              value={formData.password} 
+              onChange={onInputChange} 
               placeholder="Password"
               className="border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md"
               required
@@ -111,7 +111,7 @@ export const Signup = ({
         </div>
 
         <div className="flex flex-col items-center">
-          <SignInWithGoogle />
+          <GoogleAuthContainer/>
         </div>
       </form>
     </div>

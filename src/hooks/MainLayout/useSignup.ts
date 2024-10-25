@@ -10,6 +10,7 @@ const useSignup = () => {
   const [error, setError] = useState<string | null>(null)
 
   const handleSignup = async (formData: StudentSignupProps) => {
+    
     setLoading(true)
     setError(null)
 

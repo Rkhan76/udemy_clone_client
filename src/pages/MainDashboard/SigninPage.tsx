@@ -1,10 +1,10 @@
-import { Signin } from "../../components/MainLayout/Signin"
+import { SigninContainer } from "../../containers/MainLayout/SigninContainer"
 
 
 const SigninPage = () => {
   return (
     <div>
-      <Signin/>
+      <SigninContainer/>
     </div>
   )
 }
