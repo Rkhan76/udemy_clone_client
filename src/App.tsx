@@ -8,23 +8,37 @@ import SigninPage from './pages/MainDashboard/SigninPage'
 import SignupPage from './pages/MainDashboard/SignupPage'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useEffect } from 'react'
+import { getCookie, isTokenValid } from './utils/cookieManager'
+import { useSetRecoilState } from 'recoil'
+import { isSignedInState } from './store/atoms/auth'
 
- const GoogleAuthWrapper = ({ children }: { children: React.ReactNode }) => {
-   return (
-     <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
-       {children}
-     </GoogleOAuthProvider>
-   )
- }
-
+const GoogleAuthWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
+      {children}
+    </GoogleOAuthProvider>
+  )
+}
 
 const App = () => {
+  const setIsSignedIn = useSetRecoilState(isSignedInState)
+
+  useEffect(() => {
+    const authToken = getCookie('authToken')
+    if (authToken) {
+      if (isTokenValid(authToken)) {
+        setIsSignedIn(true)
+      }
+    }
+  }, [setIsSignedIn])
+
   return (
     <>
       <ToastContainer />
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home/>}/>
+          <Route path="/" element={<Home />} />
           <Route
             path="/signin"
             element={
