@@ -1,5 +1,6 @@
 import axios from "axios"
 import { StudentSigninProps, StudentSignupProps } from "../types/authType"
+import { getCookie } from "../utils/cookieManager"
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -57,5 +58,28 @@ export const handleSigninWithGoogle = async (code: string) => {
   } catch (error) {
     console.error('Error during Google sign-in:', error)
     throw error
+  }
+}
+
+export const handleTeacherSignup = async (id: string) => {
+  try {
+    const authToken = getCookie('authToken')
+
+    const response = await axios.post(
+      `${BASE_URL}/auth/teacher-signup`,
+      { id },
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    )
+    
+
+    if (response.data.success) return response.data
+    
+  } catch (error) {
+    console.error('Teacher signup failed:', error)
+    return null
   }
 }

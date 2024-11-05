@@ -5,12 +5,13 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { setCookie } from '../../utils/cookieManager'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { isSignedInState } from '../../store/atoms/auth'
+import { isSignedInState, isTeacherSignedInState } from '../../store/atoms/auth'
 import { userDetailsState } from '../../store/atoms/user'
 
 const useSignin = () => {
   const setIsSignedIn = useSetRecoilState(isSignedInState)
   const setUserDetails = useSetRecoilState(userDetailsState)
+  const setIsTeacherSignedIn = useSetRecoilState(isTeacherSignedInState)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -23,7 +24,7 @@ const useSignin = () => {
       const response = await handleStudentSignin(formData)
 
       if (response.success) {
-        // Set cookies with user information
+        localStorage.setItem("token", response.user.token)
         setCookie('authToken', response.user.token)
         setCookie('user', {
           id: response.user.id,
@@ -38,6 +39,9 @@ const useSignin = () => {
           email: response.user.email,
           roles: response.user.roles,
         })
+        if (response.user.roles.includes('TEACHER')){
+          setIsTeacherSignedIn(true)
+        }
         setIsSignedIn(true) 
         navigate('/')
       }

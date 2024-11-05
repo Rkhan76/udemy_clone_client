@@ -3,17 +3,23 @@ import Logo from '../../assets/logo.svg'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useRecoilState } from 'recoil'
-import { isSignedInState } from '../../store/atoms/auth'
+import { isSignedInState, isTeacherSignedInState } from '../../store/atoms/auth'
 import { userDetailsState } from '../../store/atoms/user'
 import { AvatarButton } from '../../components/MainLayout/AvatarButton'
+import { useEffect } from 'react'
 
 export const Navbar = () => {
   const [isSignedIn] = useRecoilState(isSignedInState)
   const [userDetails] = useRecoilState(userDetailsState)
+  const [setIsTeacherSignedIn] = useRecoilState(isTeacherSignedInState)
+ 
+  useEffect(()=>{
+    
+  })
 
  
   return (
-    <nav className="flex items-center justify-between p-4 bg-white shadow mb-4">
+    <nav className="flex items-center justify-between p-4 bg-white shadow-md mb-4">
       <Link to="/">
         <img src={Logo} alt="EduVoyage Logo" className="h-10" />
       </Link>
@@ -27,14 +33,26 @@ export const Navbar = () => {
           Plans & Pricing
         </NavLink>
 
-        <NavLink
-          to="/teach"
-          className={({ isActive }) =>
-            isActive ? 'font-bold' : 'hidden lg:block'
-          }
-        >
-          Teach on EduVoyage
-        </NavLink>
+        {setIsTeacherSignedIn ? (
+          <NavLink
+            to="/teacher/course"
+            className={({ isActive }) =>
+              isActive ? 'text-blue-400' : 'hidden lg:block'
+            }
+          >
+            Instructor
+          </NavLink>
+        ) : (
+          <NavLink
+            to="/teacher-signup"
+            className={({ isActive }) =>
+              isActive ? 'text-blue-400' : 'hidden lg:block'
+            }
+          >
+            Teach on EduVoyage
+          </NavLink>
+        )}
+
         <NavLink
           to="/cart"
           className={({ isActive }) => (isActive ? 'font-bold' : '')}
@@ -43,7 +61,7 @@ export const Navbar = () => {
         </NavLink>
 
         {isSignedIn ? (
-          <AvatarButton userDetails={userDetails}/>
+          <AvatarButton userDetails={userDetails} />
         ) : (
           <div className="flex items-center space-x-2 hidden lg:block">
             <Button

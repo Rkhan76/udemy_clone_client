@@ -18,7 +18,7 @@ export const SigninContainer = () => {
       const result = await handleSignin(formData)
 
       if (result?.success) {
-        toast.success('Signin successful!', { autoClose: 2000 })
+        toast.success('Signin successful!', { autoClose: 1000 })
         setFormData({ email: '', password: '' })
       } else {
         toast.error(result?.message || 'Failed to sign in. Please try again.')

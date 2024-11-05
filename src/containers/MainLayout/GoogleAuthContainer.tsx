@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { SignInWithGoogle } from '../../components/MainLayout/SiginWithGoogle'
-import { isSignedInState } from '../../store/atoms/auth'
+import { isSignedInState, isTeacherSignedInState } from '../../store/atoms/auth'
 import { handleSigninWithGoogle } from '../../services/auth'
 import { setCookie } from '../../utils/cookieManager'
 import { userDetailsState } from '../../store/atoms/user'
@@ -31,6 +31,7 @@ const GoogleAuthContainer: React.FC<GoogleAuthContainerProps> = ({
 }) => {
   const setUserDetails = useSetRecoilState(userDetailsState)
   const setIsSignedIn = useSetRecoilState(isSignedInState)
+  const setIsTeacherSignedIn = useSetRecoilState(isTeacherSignedInState)
   const navigate = useNavigate()
 
   const handleGoogleSuccess = async (response: GoogleAuthResponse) => {
@@ -52,8 +53,11 @@ const GoogleAuthContainer: React.FC<GoogleAuthContainerProps> = ({
             email: result.user.email,
             roles: result.user.roles,
           })
+          if (result.user.roles.includes('TEACHER')) {
+            setIsTeacherSignedIn(true)
+          }
           setIsSignedIn(true)
-          toast.success('Google login successful!')
+          toast.success('Google login successful!', { autoClose: 1000 })
           navigate('/')
           onSuccess?.(response) 
         } else {
@@ -65,7 +69,7 @@ const GoogleAuthContainer: React.FC<GoogleAuthContainerProps> = ({
         onError?.() 
       }
     } catch (error) {
-      toast.error('Login failed. Please try again.')
+      toast.error('Login failed. Please try again.',{ autoClose: 1000})
       console.error('Error during Google login:', error) // Log the error for debugging
       onError?.() 
     }

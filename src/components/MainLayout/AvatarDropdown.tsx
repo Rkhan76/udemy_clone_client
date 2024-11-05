@@ -1,15 +1,19 @@
 import { useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
-import { isSignedInState } from '../../store/atoms/auth'
+import { isSignedInState, isTeacherSignedInState } from '../../store/atoms/auth'
 import { userDetailsState } from '../../store/atoms/user'
+import { clearAllCookies } from '../../utils/cookieManager'
 
 export const AvatarDropdown = () => {
   const navigate = useNavigate()
   const setIsSignedIn = useSetRecoilState(isSignedInState)
   const setUserDetails = useSetRecoilState(userDetailsState)
+  const setIsTeacherSignedIn = useSetRecoilState(isTeacherSignedInState)
 
   const handleLogout = () => {
+    clearAllCookies()
     setIsSignedIn(false)
+    setIsTeacherSignedIn(false)
     setUserDetails(null)
     navigate('/')
   }

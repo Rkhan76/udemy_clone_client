@@ -2,16 +2,25 @@
 import { Routes, Route } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-
 import Home from './pages/MainDashboard/HomePage'
 import SigninPage from './pages/MainDashboard/SigninPage'
 import SignupPage from './pages/MainDashboard/SignupPage'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useEffect } from 'react'
-import { getCookie, isTokenValid } from './utils/cookieManager'
+import { decodedToken, getCookie, isTokenValid } from './utils/cookieManager'
 import { useSetRecoilState } from 'recoil'
-import { isSignedInState } from './store/atoms/auth'
+import { isSignedInState, isTeacherSignedInState } from './store/atoms/auth'
+import { userDetailsState } from './store/atoms/user'
+import TeacherSignupPage from './pages/TeacherDashboard/TeacherSignupPage'
+import TeacherLayout from './layouts/TeacherLayout'
+import TeacherDashboard from './components/TeacherDashboard/TeacherDashboard'
+import CoursePage from './pages/TeacherDashboard/CoursePage'
+import CreateCourse from './components/TeacherDashboard/CreateCourse'
+import CourseIdCreate from './components/TeacherDashboard/CourseIdCreate'
+import CourseId from './components/TeacherDashboard/CourseId'
+import CourseIdPage from './pages/TeacherDashboard/CourseIdPage'
+import ChapterIdPage from './components/TeacherDashboard/ChapterIdPage'
 
 const GoogleAuthWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -23,15 +32,30 @@ const GoogleAuthWrapper = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => {
   const setIsSignedIn = useSetRecoilState(isSignedInState)
+  const setUserDetails = useSetRecoilState(userDetailsState)
+  const setIsTeacherSignedIn = useSetRecoilState(isTeacherSignedInState)
 
   useEffect(() => {
     const authToken = getCookie('authToken')
     if (authToken) {
       if (isTokenValid(authToken)) {
+        const userDecodedToken = decodedToken(authToken)
         setIsSignedIn(true)
+
+        const isTeacher = userDecodedToken?.roles.includes('TEACHER')
+
+        if (isTeacher) {
+          setIsTeacherSignedIn(true)
+        }
+
+        if (userDecodedToken) {
+          setUserDetails(userDecodedToken)
+        } else {
+          setUserDetails(null)
+        }
       }
     }
-  }, [setIsSignedIn])
+  }, [setIsSignedIn, setUserDetails, setIsTeacherSignedIn])
 
   return (
     <>
@@ -39,6 +63,7 @@ const App = () => {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/teacher-signup" element={<TeacherSignupPage />} />
           <Route
             path="/signin"
             element={
@@ -55,6 +80,15 @@ const App = () => {
               </GoogleAuthWrapper>
             }
           />
+        </Route>
+        <Route element={<TeacherLayout />}>
+          <Route path="/teacher/course" element={<CoursePage />} />
+          <Route path="/teacher/course/create" element={<CreateCourse />} />
+          <Route
+            path="/teacher/course/create/:courseId"
+            element={<CourseIdPage/>}
+          />
+          <Route path="/teacher/courses/:courseId/chapters/:chapterId" element={<ChapterIdPage/>} />
         </Route>
       </Routes>
     </>
